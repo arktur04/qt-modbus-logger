@@ -1,0 +1,37 @@
+#ifndef VARTYPE_H
+#define VARTYPE_H
+
+#include <QString>
+#include <QByteArray>
+
+class BaseVarType
+{
+public:
+    BaseVarType() {}
+
+    inline QString typeName() {return "Base type";}
+    inline int dataSize() {return -1;}
+    inline QByteArray& byteOrder() {return m_byteOrder;}
+    inline void convertRawData(char* src, char* dest)
+    {
+        for(i = 0; i < m_dataSize; ++i)
+            (dest++)* = (src++)*;
+    }
+
+private:
+    inline void validateByteOrder();
+    QString m_typeName;
+    int m_dataSize;
+    QByteArray m_byteOrder;
+};
+
+BaseVarType::validateByteOrder()
+{
+    Q_ASSERT(m_byteOrder.size() == m_dataSize);
+    for(int i = 0; i < m_dataSize; ++i)
+    {
+        Q_ASSERT(m_byteOrder[i] >= 0 && m_byteOrder[i] < m_dataSize);
+    }
+}
+
+#endif // VARTYPE_H
